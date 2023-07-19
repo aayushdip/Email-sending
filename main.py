@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from database import  engine
@@ -8,7 +8,7 @@ from model import User
 from schemas import UserCreate, UserRead
 from dependencies import get_db
 from typing import List
-
+from send_email import send_email_background
 app =FastAPI(title="mail sending API")
 model.Base.metadata.create_all(bind=engine)
 
@@ -46,3 +46,16 @@ async def read_user(db: Session = Depends(get_db)):
     except SQLAlchemyError as e:
         print("Error caught:", e)
         raise HTTPException(status_code=500, detail="Database error")
+    
+    
+@app.get('/send-email/backgroundtasks')
+def send_email_backgroundtasks(background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+    try:
+        users = db.query(User).all()
+        email = [user.email for user in users]
+    except SQLAlchemyError as e:
+        print("Error caught:", e)
+        raise HTTPException(status_code=500, detail="Database error")
+    send_email_background(background_tasks, 'Hello World',   
+    email, {'title': 'Hello World', 'name':'John Doe'})
+    return 'Success'
