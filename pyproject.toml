@@ -16,6 +16,8 @@ fastapi-sqlalchemy = "^0.2.1"
 python-dotenv = "^1.0.0"
 bcrypt = "^4.0.1"
 annotated = "^0.0.2"
+fastapi-mail = "^1.4.1"
+psycopg2-binary = "^2.9.6"
 
 
 [build-system]
