@@ -14,7 +14,7 @@ model.Base.metadata.create_all(bind=engine)
 
 
 @app.post("/users", response_model=UserRead)
-def create_user(user: UserCreate, db: Session = Depends(get_db)):
+async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     try:
         db_user = User(fullname=user.fullname, email=user.email, hashed_password=hash_password(user.password))
         db.add(db_user)
@@ -49,7 +49,7 @@ async def read_user(db: Session = Depends(get_db)):
     
     
 @app.get('/send-email/backgroundtasks')
-def send_email_backgroundtasks(background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+async def send_email_backgroundtasks(background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     try:
         users = db.query(User).all()
         email = [user.email for user in users]
@@ -57,5 +57,5 @@ def send_email_backgroundtasks(background_tasks: BackgroundTasks, db: Session = 
         print("Error caught:", e)
         raise HTTPException(status_code=500, detail="Database error")
     send_email_background(background_tasks, 'Hello World',   
-    email, {'title': 'Hello World', 'name':'John Doe'})
+    email)
     return 'Success'

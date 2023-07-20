@@ -1,6 +1,5 @@
 from fastapi import BackgroundTasks
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig,MessageType
-from typing import Optional
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
@@ -51,13 +50,13 @@ email_file = """
 </html>
 """
 def send_email_background(background_tasks: BackgroundTasks, 
-                          subject: str, email_to: str, body: dict):
+                          subject: str, email_to: str)-> None:
     message = MessageSchema(
         subject=subject,
         body=email_file,
         recipients=email_to,
         subtype=MessageType.html,
     )
-    fm = FastMail(conf)
+    f_m = FastMail(conf)
     background_tasks.add_task(
-       fm.send_message, message)
+       f_m.send_message, message)
