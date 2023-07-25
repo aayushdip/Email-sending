@@ -1,9 +1,5 @@
 from fastapi import BackgroundTasks
-<<<<<<< HEAD:app/send_email.py
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
-=======
-from fastapi_mail import FastMail, MessageSchema, ConnectionConfig,MessageType
->>>>>>> main:send_email.py
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from app.setting import Settings
 

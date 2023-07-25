@@ -9,18 +9,11 @@ from app.models.user_model import User
 from app.schemas.user_schema import UserCreate, UserRead
 from app.dependencies import get_db
 from typing import List
-<<<<<<< HEAD:app/main.py
 from app.send_email import send_email_background
 from app.send_email import send_email_background
 
 app = FastAPI(title="mail sending API")
 models.Base.metadata.create_all(bind=engine)
-=======
-from send_email import send_email_background
-from send_email import send_email_background
-app =FastAPI(title="mail sending API")
-model.Base.metadata.create_all(bind=engine)
->>>>>>> main:main.py
 
 
 @app.post("/users", response_model=UserRead)
