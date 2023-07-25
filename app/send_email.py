@@ -1,33 +1,36 @@
 from fastapi import BackgroundTasks
-from fastapi_mail import FastMail, MessageSchema, ConnectionConfig,MessageType
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from app.setting import Settings
+
 
 class Settings(BaseSettings):
     MAIL_USERNAME: str
     MAIL_PASSWORD: str
     MAIL_PORT: int
     MAIL_SERVER: str
-    MAIL_STARTTLS: bool =True
-    MAIL_SSL_TLS: bool =False
+    MAIL_STARTTLS: bool = True
+    MAIL_SSL_TLS: bool = False
     MAIL_FROM: str
     MAIL_FROM_NAME: str | None = None
-    SQLALCHEMY_DATABASE_URL:str
+    SQLALCHEMY_DATABASE_URL: str
 
-    model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8')
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+
 
 settings = Settings()
- 
+
 conf = ConnectionConfig(
-    MAIL_USERNAME = settings.MAIL_USERNAME,
-    MAIL_PASSWORD = settings.MAIL_PASSWORD,
-    MAIL_FROM = settings.MAIL_FROM,
-    MAIL_PORT = 587,
-    MAIL_SERVER = settings.MAIL_SERVER,
+    MAIL_USERNAME=settings.MAIL_USERNAME,
+    MAIL_PASSWORD=settings.MAIL_PASSWORD,
+    MAIL_FROM=settings.MAIL_FROM,
+    MAIL_PORT=587,
+    MAIL_SERVER=settings.MAIL_SERVER,
     MAIL_FROM_NAME=settings.MAIL_FROM_NAME,
-    MAIL_STARTTLS = True,
-    MAIL_SSL_TLS = False,
-    USE_CREDENTIALS = True,
-    VALIDATE_CERTS = True,
+    MAIL_STARTTLS=True,
+    MAIL_SSL_TLS=False,
+    USE_CREDENTIALS=True,
+    VALIDATE_CERTS=True,
 )
 email_file = """
 <html>
@@ -49,8 +52,11 @@ email_file = """
 </body>
 </html>
 """
-def send_email_background(background_tasks: BackgroundTasks, 
-                          subject: str, email_to: str)-> None:
+
+
+def send_email_background(
+    background_tasks: BackgroundTasks, subject: str, email_to: str
+) -> None:
     message = MessageSchema(
         subject=subject,
         body=email_file,
@@ -58,5 +64,4 @@ def send_email_background(background_tasks: BackgroundTasks,
         subtype=MessageType.html,
     )
     f_m = FastMail(conf)
-    background_tasks.add_task(
-       f_m.send_message, message)
+    background_tasks.add_task(f_m.send_message, message)
