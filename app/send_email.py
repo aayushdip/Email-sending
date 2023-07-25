@@ -56,16 +56,11 @@ email_file = """
 </body>
 </html>
 """
-<<<<<<< HEAD:app/send_email.py
 
 
 def send_email_background(
     background_tasks: BackgroundTasks, subject: str, email_to: str
 ) -> None:
-=======
-def send_email_background(background_tasks: BackgroundTasks, 
-                          subject: str, email_to: str)-> None:
->>>>>>> main:send_email.py
     message = MessageSchema(
         subject=subject,
         body=email_file,
@@ -73,9 +68,4 @@ def send_email_background(background_tasks: BackgroundTasks,
         subtype=MessageType.html,
     )
     f_m = FastMail(conf)
-<<<<<<< HEAD:app/send_email.py
     background_tasks.add_task(f_m.send_message, message)
-=======
-    background_tasks.add_task(
-       f_m.send_message, message)
->>>>>>> main:send_email.py
